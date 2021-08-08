@@ -1,0 +1,26 @@
+{
+  "name": "medihopper",
+  "version": "1.0.0",
+  "description": "App for making GP bookings",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sir-prem/medihopper.git"
+  },
+  "author": "Prem Gangadharan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sir-prem/medihopper/issues"
+  },
+  "homepage": "https://github.com/sir-prem/medihopper#readme",
+  "dependencies": {
+    "express": "*",
+    "mongodb": "^3.6.8",
+    "mongoose": "^5.12.10",
+    "nodemon": "^2.0.7"
+  }
+}
