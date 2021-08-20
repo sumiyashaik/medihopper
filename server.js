@@ -3,11 +3,15 @@ var mongoose = require("mongoose");
 var path = require("path");
 //var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
+var passport = require("passport");
 var session = require("express-session");
 var flash = require("connect-flash");
 
 var routes = require("./routes");
+
 var app = express();
+
+var setUpPassport = require("./setuppassport");
 
 var uri = "mongodb+srv://cluster0.7hvms.mongodb.net/";
 
@@ -26,6 +30,8 @@ mongoose
   .then(
       () => {
           console.log('MongoDB connected...');
+          setUpPassport();
+          console.log('Passport setup complete...');
       }
   )
 
@@ -42,6 +48,8 @@ app.use(session ({
   saveUninitialized: true
 }));
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(routes);
 //app.use(express.static(__dirname + '/Views'));
 //app.use(bodyParser.urlencoded({extended: false }));
