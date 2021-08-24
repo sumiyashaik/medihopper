@@ -3,7 +3,6 @@ var User = require("./models/user");
 var Clinic = require("./models/clinic");
 var router = express.Router();
 var passport = require("passport");
-var ObjectID = require('mongodb').ObjectID;
 
 router.use(function(req, res, next) {
     res.locals.currentUser = req.user;

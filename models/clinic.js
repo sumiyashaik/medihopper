@@ -20,6 +20,10 @@ clinicSchema.methods.clinicPostcode = function() {
     return this.postcode;
 };
 
+clinicSchema.methods.clinicPhone = function() {
+    return this.phone;
+};
+
 clinicSchema.methods.queueCount = function() {
     return this.queue.length;
 };
