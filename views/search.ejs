@@ -1,0 +1,27 @@
+<% include _header %>
+
+<h1>Find a GP Clinic</h1>
+
+<% clinics.forEach(function(clinic) { %>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="/clinics/<%= clinic.name %>">
+                <%= clinic.clinicName() %>
+            </a>
+        </div>
+        <% if (clinic.address) { %>
+            <div class="panel-body">
+                <%= clinic.address %>
+                <%= clinic.queueCount() %>
+                <%= clinic.approxWait() %>
+                <form action="/booking-confirmation" method="post">
+                    <input name="clinicID" type="hidden"  value="<%= clinic._id %>">
+                    <input type="submit" value="Join Queue" class="btn btn-primary">
+                </form>
+            </div>
+        <% } %>
+    </div>
+
+<% }) %>
+
+<% include _footer %>

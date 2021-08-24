@@ -1,0 +1,16 @@
+<% include _header %>
+
+<h1>Booking Confirmation</h1>
+<h2>You are all set to see a doctor.</h2>
+
+<div class="panel panel-default">
+    You have now successfully booked with:
+    <br> <%= clinicID %>
+    <br> <%= currentUser.name() %>
+    <br> <%= name %>
+    <br> <%= address %>
+    <br> <%= postcode %>
+    <br> <%= phone %>
+</div>
+
+<% include _footer %>

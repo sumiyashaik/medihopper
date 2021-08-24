@@ -1,7 +1,9 @@
 var express = require("express");
 var User = require("./models/user");
+var Clinic = require("./models/clinic");
 var router = express.Router();
 var passport = require("passport");
+var ObjectID = require('mongodb').ObjectID;
 
 router.use(function(req, res, next) {
     res.locals.currentUser = req.user;
@@ -18,6 +20,65 @@ router.get("/", function(req, res, next) {
             res.render("index.ejs", { users: users });
         });
 });
+
+router.post("/search", ensureAuthenticated, function(req, res, next) {
+    Clinic.find()
+        .sort({ name: "ascending" })
+        .exec(function(err, clinics) {
+            if (err) { return next(err); }
+            res.render("search", { clinics: clinics });
+        });
+});
+
+router.post("/booking-confirmation", ensureAuthenticated, async function(req, res, next) {
+    
+    
+
+    // current user's username
+    var curUsername = res.locals.currentUser.username;
+
+    // get clinic ID (from posted form's hidden variable)
+    var clinicID = req.body.clinicID; 
+    
+    // push current user's username into clinic's queue
+    Clinic.findOneAndUpdate(
+        { _id: clinicID }, 
+        { $push: { queue: curUsername } },
+        ).exec();
+
+    //console.log("clinicID: " + clinicID);
+    //console.log("currentUser name: " + res.locals.currentUser.username);
+
+    // get clinic's details to pass to confirmation page
+    var clinicName, clinicAddress, clinicPostcode, clinicPhone;
+
+
+    await Clinic.findOne({ _id: clinicID }, function(err, clinic) {
+
+        if (err) { return next(err); }
+        if (clinic) {
+            clinicName = clinic.name;
+            console.log("1. clinic name is: " + clinic.name);
+            clinicAddress = clinic.address;
+            clinicPostcode = clinic.postcode;
+            clinicPhone = clinic.phone;
+        }
+    });
+    
+
+    console.log("2. clinic name is: " + clinicName);
+
+    res.render("booking-confirmation", 
+        { 
+            clinicID:   clinicID, 
+            name:       clinicName, 
+            address:    clinicAddress, 
+            postcode:   clinicPostcode,
+            phone:      clinicPhone
+        });
+});
+
+
 
 router.get("/signup", function(req, res) {
     res.render("signup");
@@ -90,6 +151,6 @@ router.post("/edit", ensureAuthenticated, function(req, res, next) {
         req.flash("info", "Profile updated!");
         res.redirect("/edit");
     });
-});
+});        
 
 module.exports = router;
