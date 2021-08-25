@@ -51,7 +51,9 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(routes);
-//app.use(express.static(__dirname + '/Views'));
+app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/views/images'));
+//
 //app.use(bodyParser.urlencoded({extended: false }));
 
 app.listen(port, function() {

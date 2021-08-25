@@ -2,26 +2,35 @@
 
 <h1>Find a GP Clinic</h1>
 
-<% clinics.forEach(function(clinic) { %>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <a href="/clinics/<%= clinic.name %>">
-                <%= clinic.clinicName() %>
-            </a>
-        </div>
-        <% if (clinic.address) { %>
-            <div class="panel-body">
-                <%= clinic.address %>
-                <%= clinic.queueCount() %>
-                <%= clinic.approxWait() %>
+<table class="table">
+
+    <tr>
+        <th>Clinic</th>
+        <th>Address</th>
+        <th>Queue size</th>
+        <th>Approx. Wait</th>
+        <th> </th>
+    </tr>
+
+    <% clinics.forEach(function(clinic) { %>
+        <tr>
+            <td>
+                <a href="/clinics/<%= clinic.name %>">
+                    <%= clinic.clinicName() %>
+                </a>
+            </td>
+            <td><%= clinic.address %></td>
+            <td><%= clinic.queueCount() %></td>
+            <td><%= clinic.approxWait() %> hrs</td>
+            <td>
                 <form action="/booking-confirmation" method="post">
                     <input name="clinicID" type="hidden"  value="<%= clinic._id %>">
                     <input type="submit" value="Join Queue" class="btn btn-primary">
                 </form>
-            </div>
-        <% } %>
-    </div>
+            </td>
+        </tr>
+    <% }) %>
 
-<% }) %>
+</table>
 
 <% include _footer %>

@@ -30,9 +30,7 @@ router.post("/search", ensureAuthenticated, function(req, res, next) {
 });
 
 router.post("/booking-confirmation", ensureAuthenticated, async function(req, res, next) {
-    
-    
-
+  
     // current user's username
     var curUsername = res.locals.currentUser.username;
 
@@ -51,21 +49,19 @@ router.post("/booking-confirmation", ensureAuthenticated, async function(req, re
     // get clinic's details to pass to confirmation page
     var clinicName, clinicAddress, clinicPostcode, clinicPhone;
 
-
     await Clinic.findOne({ _id: clinicID }, function(err, clinic) {
 
         if (err) { return next(err); }
         if (clinic) {
             clinicName = clinic.name;
-            console.log("1. clinic name is: " + clinic.name);
             clinicAddress = clinic.address;
             clinicPostcode = clinic.postcode;
             clinicPhone = clinic.phone;
         }
     });
     
-
-    console.log("2. clinic name is: " + clinicName);
+    // log message to console of user joining queue at clinic
+    console.log(curUsername + "joined the queue at: " + clinicName);
 
     res.render("booking-confirmation", 
         { 
