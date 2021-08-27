@@ -1,12 +1,81 @@
-
-body {
-
-}
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100&family=Dosis:wght@200;300;400&family=Raleway:wght@100;200;300;400&display=swap');
 
 h1 {
+  /* font-family: 'Raleway', sans-serif; */
+  font-family: 'Lato', sans-serif;
+  font-weight: 100;
+  font-size: 50pt;
   color: #7BBB54;
-  font-size: 70pt;
-  transform: translate(-5%, -5%);
-  margin-bottom: 80px;
+}
+
+h2 {
+  font-family: 'Dosis', sans-serif;
+  font-weight: 400;
+  font-size: 20pt;
+  color: #7BBB54;
+}
+
+body {
+  font-family: 'Dosis', sans-serif;
+  font-weight: 200;
+  font-size: 12pt;
+  color: #3e3b46;
+  background-image: url('/abstract-wave.png'), url('/grasshopper.png');
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: scroll, fixed;
+  background-position: left top, right bottom;
+  background-size: 40%, 7.5%;
+}
+
+.navbox {
+  background-color: #7BBB54;
+  margin-top: 50px;
+}
+
+a {
+  
+}
+
+a:link {
+  
+}
+/*
+a:visited {
+  color: rgb(132, 73, 158);
+}
+*/
+
+.nav > li > a {
+  font-family: 'Dosis', sans-serif;
+  font-weight: 400;
+  font-size: 14pt;
+  background-color: #7BBB54;
+  color: rgb(215, 230, 230);
+}
+
+.nav > li > a:hover {
+  background-color: #7BBB54;
+  color: white;
+}
+
+a:active {
+  background-color: hotpink;
+}
+
+.table > tbody > tr > th, .table > tbody > tr > td {
+  border-top: none;
+}
+
+
+.btn-primary {
+  color: #fff;
+  background-color: #7BBB54;
+  border-color: #ffffff;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #91cf6b;
+  border-color: #ffffff;
 }
 

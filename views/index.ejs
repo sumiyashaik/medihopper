@@ -1,19 +1,34 @@
 <% include _header %>
 
-<h1>You’re a hop away from
+<br>
+
+<h1>You’re only a hop away from
     your next GP visit</h1>
+
+<br>
 
 <h2>mediHopper provides a flexible queue system. 
     You are now in control of your appointment time.</h2>
 
-<div class="panel panel-default">
-    <div class="panel-body">
+<h2>Hop into the queue that suits you best. If your plans change,
+    simply hop out, or hop back a few positions.</h2>
+
+    <br><br>
+    <p>Please start by entering your postcode below to see the 
+        clinics near you.</p>
+
         <form action="/search" method="post">
-            <input name="postcode" type="text" class="form-control"
-            placeholder="e.g. 3000">
-            <input type="submit" value="Find" class="btn btn-primary">
+            <table class="table">
+                <tr>
+                    <td>Postcode:</td>
+                    <td><input name="postcode" type="text" class="form-control"
+                        placeholder="e.g. 3000"></td>
+                    <td><input type="submit" value="Find" class="btn btn-primary"></td>
+                </tr>
+                
+                
+            </table>
         </form>
-    </div>
-</div>
+
 
 <% include _footer %>
