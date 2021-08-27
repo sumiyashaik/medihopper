@@ -3,6 +3,17 @@ var User = require("./models/user");
 var Clinic = require("./models/clinic");
 var router = express.Router();
 var passport = require("passport");
+var request = require("request");
+const NodeGeocoder = require('node-geocoder');
+
+// options for NodeGeocoder npm package
+const options = {
+    provider: 'google', 
+    // Optional depending on the providers
+    apiKey: 'AIzaSyCFWLMNFY6YuUNRWphBPMkfXJodkz_oMAA', // for Mapquest, OpenCage, Google Premier
+    formatter: null // 'gpx', 'string', ...
+  };
+const geocoder = NodeGeocoder(options);
 
 router.use(function(req, res, next) {
     res.locals.currentUser = req.user;
@@ -36,20 +47,21 @@ router.post("/booking-confirmation", ensureAuthenticated, async function(req, re
 
     // get clinic ID (from posted form's hidden variable)
     var clinicID = req.body.clinicID; 
+
+    //console.log("clinicID: " + clinicID);
+    //console.log("currentUser name: " + curUsername);
     
     // push current user's username into clinic's queue
-    Clinic.findOneAndUpdate(
+    await Clinic.findOneAndUpdate(
         { _id: clinicID }, 
         { $push: { queue: curUsername } },
         ).exec();
 
-    //console.log("clinicID: " + clinicID);
-    //console.log("currentUser name: " + res.locals.currentUser.username);
 
     // get clinic's details to pass to confirmation page
     var clinicName, clinicAddress, clinicPostcode, clinicPhone;
 
-    await Clinic.findOne({ _id: clinicID }, function(err, clinic) {
+    await Clinic.findOne({ _id: clinicID }, async function(err, clinic) {
 
         if (err) { return next(err); }
         if (clinic) {
@@ -59,20 +71,38 @@ router.post("/booking-confirmation", ensureAuthenticated, async function(req, re
             clinicPhone = clinic.phone;
         }
     });
+
+    
+    var address = "10/10 Ardoch Street Essendon VIC";
+
+    // Gets properties of latitude and longitude based on address
+    const geoResult = await geocoder.geocode(address);
+    //console.log(geoResult);
+    console.log("latitude is: " + geoResult[0].latitude);
+    const latitude = geoResult[0].latitude;
+    const longitude = geoResult[0].longitude;
+
+    /*
+    var locJSON = await getMapLocation(address);
+    
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    console.log("locJSON: " + locJSON);
+    */
     
     // log message to console of user joining queue at clinic
-    console.log(curUsername + "joined the queue at: " + clinicName);
-
+    console.log(curUsername + " joined the queue at: " + clinicName);
+    
     res.render("booking-confirmation", 
         { 
             clinicID:   clinicID, 
             name:       clinicName, 
             address:    clinicAddress, 
             postcode:   clinicPostcode,
-            phone:      clinicPhone
+            phone:      clinicPhone,
+            latitude:   latitude,
+            longitude:  longitude
         });
 });
-
 
 
 router.get("/signup", function(req, res) {

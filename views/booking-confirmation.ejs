@@ -5,11 +5,24 @@
 
 <div class="panel panel-default">
     You have now successfully booked with:
-    <br> <%= currentUser.name() %>
-    <br> <%= name %>
-    <br> <%= address %>
-    <br> <%= postcode %>
-    <br> <%= phone %>
+    <table class="table">
+        <tr>
+            <td>
+                <br> <%= currentUser.name() %>
+                <br> <%= name %>
+                <br> <%= address %>
+                <br> <%= postcode %>
+                <br> <%= phone %>
+                <br> lat: <%= latitude %>
+                <br> long: <%= longitude %>
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+
+    </table>
+    
 </div>
 
 <% include _footer %>
