@@ -1,9 +1,8 @@
 var express = require("express");
+var router = express.Router();
 var User = require("./models/user");
 var Clinic = require("./models/clinic");
-var router = express.Router();
 var passport = require("passport");
-var request = require("request");
 const NodeGeocoder = require('node-geocoder');
 
 // options for NodeGeocoder npm package
@@ -47,63 +46,71 @@ router.post("/booking-confirmation", ensureAuthenticated, async function(req, re
 
     // get clinic ID (from posted form's hidden variable)
     var clinicID = req.body.clinicID; 
-
-    //console.log("clinicID: " + clinicID);
-    //console.log("currentUser name: " + curUsername);
     
     // push current user's username into clinic's queue
-    await Clinic.findOneAndUpdate(
+    // and store clinic document in variable to pass to 
+    // booking confirmation page
+    var clinic = await Clinic.findOneAndUpdate(
         { _id: clinicID }, 
         { $push: { queue: curUsername } },
         ).exec();
 
-
-    // get clinic's details to pass to confirmation page
-    var clinicName, clinicAddress, clinicPostcode, clinicPhone;
-
-    await Clinic.findOne({ _id: clinicID }, async function(err, clinic) {
-
-        if (err) { return next(err); }
-        if (clinic) {
-            clinicName = clinic.name;
-            clinicAddress = clinic.address;
-            clinicPostcode = clinic.postcode;
-            clinicPhone = clinic.phone;
-        }
-    });
-
-    
-    var address = "10/10 Ardoch Street Essendon VIC";
-
     // Gets properties of latitude and longitude based on address
-    const geoResult = await geocoder.geocode(address);
-    //console.log(geoResult);
-    console.log("latitude is: " + geoResult[0].latitude);
+    const geoResult = await geocoder.geocode(clinic.clinicAddress());
     const latitude = geoResult[0].latitude;
     const longitude = geoResult[0].longitude;
-
-    /*
-    var locJSON = await getMapLocation(address);
-    
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    console.log("locJSON: " + locJSON);
-    */
+    console.log("latitude is: " + latitude);
+    console.log("longitude is: " + longitude);
     
     // log message to console of user joining queue at clinic
-    console.log(curUsername + " joined the queue at: " + clinicName);
+    console.log(curUsername + " joined the queue at: " + clinic.clinicName());
+
+    let curTime = await getCurTimeStr();
+    let etaTime = await getEtaTimeStr(clinic.approxWait());
     
     res.render("booking-confirmation", 
         { 
-            clinicID:   clinicID, 
-            name:       clinicName, 
-            address:    clinicAddress, 
-            postcode:   clinicPostcode,
-            phone:      clinicPhone,
+            clinic:     clinic,
             latitude:   latitude,
-            longitude:  longitude
+            longitude:  longitude,
+            key:        'AIzaSyCFWLMNFY6YuUNRWphBPMkfXJodkz_oMAA',
+            curTime:    curTime,
+            etaTime:    etaTime
         });
 });
 
+// Gets the current time and returns it as a String
+async function getCurTimeStr() {
+
+    var currentDateObj = new Date();
+
+    // current hours
+    let curHours = currentDateObj.getHours();
+
+    // current minutes
+    let curMinutes = currentDateObj.getMinutes();
+
+    return (curHours + ":" + curMinutes);
+}
+
+// Gets ETA of patient (expected time of arrival), 
+// based on a clinic's wait time
+async function getEtaTimeStr(waitTimeHours) {
+    var waitTimeMlSeconds = waitTimeHours *60 * 60 * 1000;
+
+    var currentDateObj = new Date();
+    var currentMlSeconds = currentDateObj.getTime();
+
+    var newDateObj = new Date(currentMlSeconds + waitTimeMlSeconds);
+
+    // eta hours
+    let etaHours = newDateObj.getHours();
+
+    // current minutes
+    let etaMinutes = newDateObj.getMinutes();
+
+    return (etaHours + ":" + etaMinutes);
+}
 
 router.get("/signup", function(req, res) {
     res.render("signup");

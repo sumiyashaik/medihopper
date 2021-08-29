@@ -1,28 +1,68 @@
 <% include _header %>
 
+<script>
+    // Initialize and add the map
+    function initMap() {
+      // The location of Uluru
+      const thisClinic = { lat: <%= latitude %>, lng: <%= longitude %> };
+      // The map, centered at Uluru
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 15,
+        center: thisClinic,
+      });
+      // The marker, positioned at Uluru
+      const marker = new google.maps.Marker({
+        position: thisClinic,
+        map: map,
+        icon: { url:        'map-marker.png', 
+                scaledSize: new google.maps.Size(150, 50), // scaled size
+                origin:     new google.maps.Point(0,0), // origin
+                anchor:     new google.maps.Point(100, 15), // anchor
+                labelOrigin: new google.maps.Point(75,15),
+        },
+        label: { color: '#FFFFFF', fontWeight: 'bold', fontSize: '9pt', text: '<%= clinic.clinicName() %>' }
+      });
+    }
+</script>
+
 <h1>Booking Confirmation</h1>
-<h2>You are all set to see a doctor.</h2>
+<h2>You are all set to see a doctor, <%= currentUser.name() %>.</h2>
+<br>
 
-<div class="panel panel-default">
-    You have now successfully booked with:
-    <table class="table">
-        <tr>
-            <td>
-                <br> <%= currentUser.name() %>
-                <br> <%= name %>
-                <br> <%= address %>
-                <br> <%= postcode %>
-                <br> <%= phone %>
-                <br> lat: <%= latitude %>
-                <br> long: <%= longitude %>
-            </td>
-            <td>
-                
-            </td>
-        </tr>
 
-    </table>
+<p>You have now successfully joined the queue at:</p>
+<table class="table">
+    <tr>
+        <td>
+            <br><b> <%= clinic.clinicName() %> </b>
+            <br> <%= clinic.clinicAddress() %> <%= clinic.clinicPostcode() %>
+            <br>Phone: <%= clinic.clinicPhone() %>
+        </td>
+        <td width="75%">
+            <div id="map"></div>
+        </td>
+    </tr>
+
+</table>
     
-</div>
+<p>Your wait time is approximately <b><%= clinic.approxWait() %> hrs</b>.
+    Please aim to arrive by <b><%= etaTime %></b>. </p>
+    
+<p>You can manage your queue position by clicking on the button below.</p>
+
+<p>
+    <form action="#" method="post">
+        <input name="clinicID" type="hidden"  value="<%= clinic._id %>">
+        <input type="submit" value="Manage My Queue Position" class="btn btn-primary">
+    </form>
+</p>
+
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=<%= key %>&callback=initMap&libraries=&v=weekly"
+      async
+    ></script>
+
+
+
 
 <% include _footer %>
