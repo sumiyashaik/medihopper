@@ -8,7 +8,11 @@ var userSchema = mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     displayName: String,
     bio: String,
-    role: String
+    role: String,
+    profileImage: {
+        data: Buffer,
+        contentType: String
+        }
 });
 
 userSchema.methods.name = function() {

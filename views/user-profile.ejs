@@ -1,0 +1,11 @@
+<% include _header %>
+
+<h1>User Profile</h1>
+
+<div>
+    <img src="data:image/<%=currentUser.profileImage.contentType%>;base64,
+         <%=currentUser.profileImage.data.toString('base64')%>" width="200px">
+</div>
+
+
+<% include _footer %>

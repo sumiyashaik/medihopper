@@ -4,6 +4,8 @@ var User = require("./models/user");
 var Clinic = require("./models/clinic");
 var passport = require("passport");
 const NodeGeocoder = require('node-geocoder');
+var fs = require("fs");
+var multer = require("multer");
 
 // options for NodeGeocoder npm package
 const options = {
@@ -20,6 +22,24 @@ router.use(function(req, res, next) {
     res.locals.infos = req.flash("info");
     next();
 });
+
+
+
+
+// Upload profile image file to 'uploads' folder in disk storage
+// using multer's diskStorage method
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function(req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+const upload = multer({storage});
+
+
+
 
 router.get("/", function(req, res, next) {
     User.find()
@@ -113,10 +133,10 @@ async function getEtaTimeStr(waitTimeHours) {
 }
 
 router.get("/signup", function(req, res) {
-    res.render("signup");
+    res.render("signup", {currentUser:res.locals.currentUser});
 });
 
-router.post("/signup", function(req, res, next) {
+router.post("/signup", upload.single('profile-image'),function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
 
@@ -127,20 +147,37 @@ router.post("/signup", function(req, res, next) {
             req.flash("error", "User already exists");
             return res.redirect("/signup");
         }
-
+        
         var newUser = new User ({
             username: username,
             password: password
         });
-        newUser.save(next);
+        console.log("req.file is: " + req.file);
+        console.log("req.file.filename is: " + req.file.filename);
+        console.log("req.file.path is: " + req.file.path);
+        console.log("req.file.fieldname is: " + req.file.fieldname);
+        //console.log("req.files[0].fieldname is: " + req.files[0].fieldname);
 
+        newUser.profileImage.data = fs.readFileSync(req.file.path);
+        newUser.profileImage.contentType = 'image/png';
+        newUser.save(next);
     });
     }, 
     passport.authenticate("login", {
-        successRedirect: "/",
+        successRedirect: "/user-profile",
         failureRedirect: "/signup",
         failureFlash: true
 }));
+
+router.get('/user-profile', (req, res) => {
+    
+    res.render('user-profile');
+        
+});
+
+
+
+
 
 router.get("/login", function(req, res) {
     res.render("login");
