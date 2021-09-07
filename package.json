@@ -27,6 +27,7 @@
     "express-session": "^1.7.6",
     "mongodb": "^3.6.8",
     "mongoose": "^5.12.10",
+    "morgan": "^1.10.0",
     "node-geocoder": "^3.27.0",
     "nodemon": "^2.0.7",
     "passport": "^0.2.0",

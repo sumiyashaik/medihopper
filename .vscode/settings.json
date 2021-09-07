@@ -1,0 +1,5 @@
+{
+    "diffEditor.wordWrap": "off",
+    "editor.accessibilitySupport": "off",
+    "editor.wrappingIndent": "deepIndent"
+}

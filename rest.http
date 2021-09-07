@@ -1,0 +1,10 @@
+GET http://localhost:4000/
+
+### Login 
+POST http://localhost:4000/login/
+Content-Type: application/json
+
+{
+    "username": "premg",
+    "password": "12345"
+}
