@@ -2,21 +2,22 @@
 var express = require("express");
 var mongoose = require("mongoose");
 var path = require("path");
-//var bodyParser = require("body-parser");
 var cookieParser = require("cookie-parser");
 var passport = require("passport");
 var session = require("express-session");
 var flash = require("connect-flash");
 var morgan = require("morgan");
 
-var routes = require("./routes");
-
+// initialise express app
 var app = express();
 
+// require files
 var setUpPassport = require("./setuppassport");
 
+// path to mongo database
 var uri = "mongodb+srv://cluster0.7hvms.mongodb.net/";
 
+// connect to DB
 mongoose
   .connect(
     uri,
@@ -37,6 +38,7 @@ mongoose
       }
   )
 
+// define port number
 const port = 4000;
 
 //================================================================
@@ -75,13 +77,17 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/views'));
 app.use(express.static(__dirname + '/views/images'));
 
-// middleware to serve route requests
-app.use(routes);
+// middleware routers
+const userRouter = require(`./routers/user`);
+const clinicRouter = require('./routers/clinic');
+app.use('/', userRouter);
+app.use('/clinic', clinicRouter);
+
 
 // middleware for invalid routes
 app.use(function(req, res) {
   res.status(404);
-  req.flash("error", "You attempted to access an invalid route. Redirecting to home.");
+  req.flash("error", "404 ERROR: Invalid route. Redirecting to home.");
   res.redirect("/");
 });
 

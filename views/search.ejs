@@ -25,7 +25,7 @@
             <td><%= clinic.queueCount() %></td>
             <td><%= clinic.approxWait() %> hrs</td>
             <td>
-                <form action="/booking-confirmation" method="post">
+                <form action="/clinic/booking-confirmation" method="post">
                     <input name="clinicID" type="hidden"  value="<%= clinic._id %>">
                     <input type="submit" value="Join Queue" class="btn btn-primary">
                 </form>
