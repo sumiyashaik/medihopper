@@ -27,30 +27,53 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 
-
-
+//=====================================
+//      display the homepage
+//
 router.get("/", UserController.homepage);
 
+//=====================================
+//      display the sign up form
+//
 router.get("/signup", UserController.signUpForm);
 
-router.post("/signup", upload.single('profile-image'), 
-                UserController.signup, 
-                passport.authenticate("login", {
-                    successRedirect: "/user-profile",
-                    failureRedirect: "/signup",
-                    failureFlash: true
-            }));
-
-router.get('/user-profile', UserController.userprofile);
-
+//=====================================
+//      display the login form
+//
 router.get("/login", UserController.loginForm);
 
-//handler for POST to /login
-router.post("/login", passport.authenticate("login", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true
-}));
+//=====================================
+//      add the new user to DB
+//
+router.post("/signup", upload.single('profile-image'), 
+    UserController.signup, 
+    passport.authenticate("login", {
+        successRedirect: "/user-profile",
+        failureRedirect: "/signup",
+        failureFlash: true
+    })
+);
+
+//========================================
+//      authenticate the user's login attempt
+//
+router.post("/login", 
+    passport.authenticate("login", {
+        successRedirect: "/",
+        failureRedirect: "/login",
+        failureFlash: true
+    })
+);
+
+
+//========================================
+//      authenticate the user's login attempt
+//
+router.get('/user-profile', UserController.userprofile);
+
+
+
+
 
 router.get("/logout", UserController.logout);
 
