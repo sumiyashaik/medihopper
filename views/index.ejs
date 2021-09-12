@@ -1,34 +1,51 @@
 <% include _header %>
 
-<br>
 
-<h1>You’re only a hop away from
-    your next GP visit</h1>
+<div class="row">
+    <div class="col-sm-12">
+        <h1>You’re only a hop away from
+            your next GP visit</h1>
+        
+        <h2>mediHopper provides a flexible queue system. 
+            You are now in control of your appointment time.</h2>
+        
+        <h2>Hop into the queue that suits you best. If your plans change,
+            simply hop out, or hop back a few positions.</h2>
+    </div>
+</div>
 
-<br>
-
-<h2>mediHopper provides a flexible queue system. 
-    You are now in control of your appointment time.</h2>
-
-<h2>Hop into the queue that suits you best. If your plans change,
-    simply hop out, or hop back a few positions.</h2>
-
-    <br><br>
-    <p>Please start by entering your postcode below to see the 
-        clinics near you.</p>
-
-        <form action="/clinic/search" method="post">
-            <table class="table">
+<div class="row">
+    <div class="col-sm-6 card rounded login">
+        <h2>Login</h2>
+        <p>Existing users, please log in below.</p>
+        <table class="table table-borderless">
+            <form action="/login" method="POST">
                 <tr>
-                    <td>Postcode:</td>
-                    <td><input name="postcode" type="text" class="form-control"
-                        placeholder="e.g. 3000"></td>
-                    <td><input type="submit" value="Find" class="btn btn-primary"></td>
+                    <td>Username:</td>
+                    <td>
+                        <input name="username" type="text" class="form-control"
+                        placeholder="Username">
+                    </td>
                 </tr>
-                
-                
-            </table>
-        </form>
+                <tr>
+                    <td>Password:</td>
+                    <td>
+                        <input name="password" type="password" class="form-control"
+                        placeholder="Password">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Log in" class="btn btn-primary">
+                    </td>
+                </tr>            
+            </form>
+        </table>
 
+    </div>
+    <div class="col-sm-6">
+        <img src="doctor-patient-1.jpg" width="100%">
+    </div>
+</div>
 
 <% include _footer %>

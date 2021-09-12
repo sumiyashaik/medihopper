@@ -56,20 +56,43 @@ function logout (req, res) {
 }
 
 function editForm (req, res) {
-    res.render("edit");
+    res.render("edit-profile");
 }
 
 function edit (req, res, next) {
-    req.user.displayName = req.body.displayName;
-    req.user.bio = req.body.bio;
+    //console.log("req.body is: " + req.body);
+    //console.log("req.body.street is: " + req.body.street);
+    
+    req.user.name.given = req.body.given;
+    req.user.name.middle = req.body.middle;
+    req.user.name.family = req.body.family;
+    req.user.dob = req.body.dob;
+    req.user.address.street = req.body.street;
+    req.user.address.city = req.body.city;
+    req.user.address.state = req.body.state;
+    req.user.address.postcode = req.body.postcode;
+    req.user.mobile = req.body.mobile;
+    req.user.email = req.body.email;
+
+    
+    if (typeof req.file !== 'undefined') {
+        req.user.profileImage.data = fs.readFileSync(req.file.path);
+        req.user.profileImage.contentType = 'image/png';
+    }
+
+    //console.log("req.user is: " + req.user);
+
     req.user.save(function(err) {
         if (err) {
             next(err);
             return;
         }
         req.flash("info", "Profile updated!");
-        res.redirect("/edit");
+        res.redirect("/user-profile");
+        //res.render('user-profile');
     });
+    
+   //res.send(req.body);
 }
 
 module.exports = {

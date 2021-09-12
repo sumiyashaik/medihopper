@@ -2,21 +2,54 @@ var mongoose = require("mongoose");
 var bcrypt = require("bcrypt-nodejs");
 var SALT_FACTOR = 10;
 
+const statesArray = ["NSW", "VIC", "QLD", "ACT", "SA", "NT", "WA", "TAS"];
+const rolesArray = ["patient", "doctor", "admin"];
+
 var userSchema = mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
-    displayName: String,
-    bio: String,
-    role: String,
+    username: { 
+        type: String, 
+        required: true, 
+        unique: true 
+    },
+    password: { 
+        type: String, 
+        required: true 
+    },
+    createdAt: { 
+        type: Date, 
+        default: Date.now 
+    },
+    name: {
+        given: String,
+        middle: String,
+        family: String
+    },
+    role: { 
+        type: String, 
+        enum : rolesArray 
+    },
+    dob: { type: Date },
+    address: { 
+        street: String, 
+        city: String, 
+        state: {
+            type: String,
+            uppercase: true,
+            required: true,
+            enum: statesArray
+        }, 
+        postcode: Number 
+    },
+    mobile: String,
+    email: String,
     profileImage: {
         data: Buffer,
         contentType: String
         }
 });
 
-userSchema.methods.name = function() {
-    return this.displayName || this.username;
+userSchema.methods.dispName = function() {
+    return this.name.given || this.username;
 };
 
 var noop = function() {};

@@ -7,6 +7,7 @@ var Utils = require('../utils/utils');
 
 var router = express.Router();
 
+// set the current user
 router.use(function(req, res, next) {
     res.locals.currentUser = req.user;
     res.locals.errors = req.flash("error");
@@ -14,8 +15,12 @@ router.use(function(req, res, next) {
     next();
 });
 
-// Upload profile image file to 'uploads' folder in disk storage
-// using multer's diskStorage method
+
+//===============================================================
+//
+//      Upload profile image file to 'uploads' folder 
+//      in disk storage using multer's diskStorage method
+//
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, 'uploads/')
@@ -28,58 +33,78 @@ const upload = multer({storage});
 
 
 //=====================================
-//      display the homepage
+//
+//      HOMEPAGE ROUTE
 //
 router.get("/", UserController.homepage);
 
+
+
 //=====================================
-//      display the sign up form
 //
+//      SIGN UP ROUTES
+//
+
+// display sign up form
 router.get("/signup", UserController.signUpForm);
 
-//=====================================
-//      display the login form
-//
-router.get("/login", UserController.loginForm);
 
-//=====================================
-//      add the new user to DB
-//
+// sign up the new user (save to DB and log them in)
 router.post("/signup", upload.single('profile-image'), 
     UserController.signup, 
-    passport.authenticate("login", {
-        successRedirect: "/user-profile",
-        failureRedirect: "/signup",
-        failureFlash: true
-    })
+    passport.authenticate("login", 
+        {
+            successRedirect: "/user-profile",
+            failureRedirect: "/signup",
+            failureFlash: true
+        })
 );
 
-//========================================
-//      authenticate the user's login attempt
+
+
+//=====================================
 //
+//      LOGIN ROUTES
+//
+
+// display the login form
+router.get("/login", UserController.loginForm);
+
+
+// authenticate the user's login attempt
 router.post("/login", 
-    passport.authenticate("login", {
-        successRedirect: "/",
-        failureRedirect: "/login",
-        failureFlash: true
-    })
+    passport.authenticate("login", 
+        {
+            successRedirect: "/user-profile",
+            failureRedirect: "/login",
+            failureFlash: true
+        })
 );
 
 
-//========================================
-//      authenticate the user's login attempt
+//=====================================
 //
-router.get('/user-profile', UserController.userprofile);
+//      USER PROFILE ROUTES
+//
+
+// display user's profile (if logged in)
+router.get('/user-profile', Utils.ensureAuthenticated, UserController.userprofile);
+
+// display form for editing user profile
+router.get("/edit-profile", Utils.ensureAuthenticated, UserController.editForm);
+
+// saves updated user profile data
+router.post("/edit-profile", upload.single('profile-image'), UserController.edit);
 
 
 
-
-
+//========================================
+//
+//      LOGOUT ROUTE
+//
 router.get("/logout", UserController.logout);
 
-router.get("/edit", Utils.ensureAuthenticated, UserController.editForm);
-
-router.post("/edit", Utils.ensureAuthenticated, UserController.edit);
 
 
+// export this router
 module.exports = router;

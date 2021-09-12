@@ -1,0 +1,52 @@
+<% include _header %>
+
+<h1>Edit Profile</h1>
+
+<form action="/edit-profile" method="POST" enctype="multipart/form-data">
+
+    <input name="given" type="text" class="form-control"
+        placeholder="given name" 
+        value="<%= currentUser.name.given || "" %>">
+
+    <input name="middle" type="text" class="form-control"
+        placeholder="middle name" 
+        value="<%= currentUser.name.middle || "" %>">
+
+    <input name="family" type="text" class="form-control"
+        placeholder="family name" 
+        value="<%= currentUser.name.family || "" %>">
+
+    <input name="dob" type="date" class="form-control"
+        placeholder="dob" 
+        value="<%= currentUser.dob || "" %>">
+
+    <input name="street" class="form-control"
+        placeholder="street"
+        value="<%= currentUser.address.street || "" %>">
+        
+    <input name="city" class="form-control"
+        placeholder="city"
+        value="<%= currentUser.address.city || "" %>">
+        
+    <input name="state" class="form-control"
+        placeholder="state"
+        value="<%= currentUser.address.state || "" %>">
+        
+    <input name="postcode" class="form-control"
+        placeholder="postcode"
+        value="<%= currentUser.address.postcode || "" %>">
+        
+    <input name="mobile" class="form-control"
+        placeholder="mobile"
+        value="<%= currentUser.mobile || "" %>">
+        
+    <input name="email" class="form-control"
+        placeholder="email"
+        value="<%= currentUser.email || "" %>">
+
+    <input type="file" name="profile-image">
+    
+    <input type="submit" value="Update" class="btn btn-primary btn-block">
+</form>
+
+<% include _footer %>
