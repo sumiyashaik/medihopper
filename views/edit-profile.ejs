@@ -27,10 +27,22 @@
     <input name="city" class="form-control"
         placeholder="city"
         value="<%= currentUser.address.city || "" %>">
-        
-    <input name="state" class="form-control"
-        placeholder="state"
-        value="<%= currentUser.address.state || "" %>">
+    
+    <select name="state">
+        <% if (currentUser.address.state === "") { %> 
+            <option value="">Choose...</option>
+        <% } else { %> 
+            <option value="<%= currentUser.address.state %>"><%= currentUser.address.state %></option>
+        <% } %> 
+        <option value="NSW">NSW</option>
+        <option value="VIC">VIC</option>
+        <option value="QLD">QLD</option>
+        <option value="ACT">ACT</option>
+        <option value="SA">SA</option>
+        <option value="NT">NT</option>
+        <option value="WA">WA</option>
+        <option value="TAS">TAS</option>
+    </select>
         
     <input name="postcode" class="form-control"
         placeholder="postcode"

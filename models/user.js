@@ -2,9 +2,6 @@ var mongoose = require("mongoose");
 var bcrypt = require("bcrypt-nodejs");
 var SALT_FACTOR = 10;
 
-const statesArray = ["NSW", "VIC", "QLD", "ACT", "SA", "NT", "WA", "TAS"];
-const rolesArray = ["patient", "doctor", "admin"];
-
 var userSchema = mongoose.Schema({
     username: { 
         type: String, 
@@ -24,20 +21,12 @@ var userSchema = mongoose.Schema({
         middle: String,
         family: String
     },
-    role: { 
-        type: String, 
-        enum : rolesArray 
-    },
+    role: String,
     dob: { type: Date },
     address: { 
         street: String, 
         city: String, 
-        state: {
-            type: String,
-            uppercase: true,
-            required: true,
-            enum: statesArray
-        }, 
+        state: String, 
         postcode: Number 
     },
     mobile: String,

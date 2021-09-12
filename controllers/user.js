@@ -17,7 +17,53 @@ function signUpForm (req, res) {
 function signup (req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
+    
+    var role = req.body.role;
 
+    var given, middle, family, 
+        street, city, state, postcode, 
+        dob, mobile, email = "";
+
+    if (typeof req.body.given !== 'undefined') {
+        given = req.body.given;
+    }
+
+    if (typeof req.body.middle !== 'undefined') {
+        middle = req.body.middle;
+    }
+
+    if (typeof req.body.family !== 'undefined') {
+        family = req.body.family;
+    }
+
+    if (typeof req.body.street !== 'undefined') {
+        street = req.body.street;
+    }
+
+    if (typeof req.body.city !== 'undefined') {
+        city = req.body.city;
+    }
+
+    if (typeof req.body.state !== 'undefined') {
+        state = req.body.state;
+    }
+
+    if (typeof req.body.postcode !== 'null') {
+        postcode = req.body.postcode;
+    }
+
+    if (typeof req.body.dob !== 'null') {
+        dob = req.body.dob;
+    }
+
+    if (typeof req.body.mobile !== 'undefined') {
+        mobile = req.body.mobile;
+    }
+
+    if (typeof req.body.email !== 'undefined') {
+        email = req.body.email;
+    }
+    
     User.findOne({ username:username }, function(err, user) {
 
         if (err) { return next(err); }
@@ -28,7 +74,22 @@ function signup (req, res, next) {
         
         var newUser = new User ({
             username: username,
-            password: password
+            password: password,
+            role: role,
+            name: { 
+                given: given,
+                middle: middle,
+                family: family
+            },
+            address: {
+                street: street,
+                city: city,
+                state: state,
+                postcode: postcode
+            },
+            dob: dob,
+            mobile: mobile,
+            email: email
         });
         console.log("req.file is: " + req.file);
         console.log("req.file.filename is: " + req.file.filename);
@@ -95,6 +156,23 @@ function edit (req, res, next) {
    //res.send(req.body);
 }
 
+function deleteForm (req, res) {
+    res.render("delete-profile");
+}
+
+function deleteUser (req, res, next) {
+    
+    const userToDelete = res.locals.currentUser.username;
+    console.log("userToDelete: " + userToDelete);
+    User.findOneAndRemove({username: userToDelete})
+    .exec(function(err) {
+        if (err) { return next(err); }
+        req.flash("info", "Account successfully deleted!");
+        req.logout();
+        res.redirect("/");
+    });
+}
+
 module.exports = {
     homepage,
     signUpForm,
@@ -103,5 +181,7 @@ module.exports = {
     loginForm,
     logout,
     editForm,
-    edit
+    edit,
+    deleteForm,
+    deleteUser
 }

@@ -96,6 +96,11 @@ router.get("/edit-profile", Utils.ensureAuthenticated, UserController.editForm);
 // saves updated user profile data
 router.post("/edit-profile", upload.single('profile-image'), UserController.edit);
 
+// display form for deleting user profile
+router.get("/delete-profile", Utils.ensureAuthenticated, UserController.deleteForm);
+
+// remove user from database
+router.post("/delete-profile", UserController.deleteUser);
 
 
 //========================================

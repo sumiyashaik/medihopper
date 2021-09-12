@@ -2,14 +2,117 @@
 
 <h1>Sign up</h1>
 
-<form action="/signup" method="post" enctype="multipart/form-data">
-    <input name="username" type="text" class="form-control"
-        placeholder="Username" required autofocus>
-    <input name="password" type="password" class="form-control"
-        placeholder="Password" required>
-    <input type="file" name="profile-image" value="" required>
-    <input type="submit" value="Sign up" class="btn btn-primary btn-block">
-</form>
+<table width="100%">
+    <form action="/signup" method="post" enctype="multipart/form-data">
+    <tr>
+        <td class="reqfield">Username:</td>
+        <td>
+            <input name="username" type="text" class="form-control"
+            placeholder="Username" required autofocus>
+        </td>
+    </tr>
+    <tr>
+        <td class="reqfield">Password:</td>
+        <td>
+            <input name="password" type="password" class="form-control"
+            placeholder="Password" required>
+        </td>
+    </tr>
+    <tr>
+        <td>Given name:</td>
+        <td>
+            <input name="given" type="text" class="form-control"
+            placeholder="Given name">
+        </td>
+    </tr>
+    <tr>
+        <td>Middle name:</td>
+        <td>
+            <input name="middle" type="text" class="form-control"
+            placeholder="Middle name">
+        </td>
+    </tr>
+    <tr>
+        <td>Family name:</td>
+        <td>
+            <input name="family" type="text" class="form-control"
+            placeholder="Family name">
+        </td>
+    </tr>
+
+    <tr>
+        <td>Date of birth:</td>
+        <td>
+            <input name="dob" type="date" class="form-control"
+            placeholder="Date of Birth">
+        </td>
+    </tr>
+
+    <tr>
+        <td>Street:</td>
+        <td>
+            <input name="street" type="text" class="form-control"
+            placeholder="Street">
+        </td>
+    </tr>
+    <tr>
+        <td>City:</td>
+        <td>
+            <input name="city" type="text" class="form-control"
+            placeholder="City">
+        </td>
+    </tr>
+    <tr>
+        <td>State:</td>
+        <td>
+            <select name="state">
+                <option value="">Choose...</option>
+                <option value="NSW">NSW</option>
+                <option value="VIC">VIC</option>
+                <option value="QLD">QLD</option>
+                <option value="ACT">ACT</option>
+                <option value="SA">SA</option>
+                <option value="NT">NT</option>
+                <option value="WA">WA</option>
+                <option value="TAS">TAS</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Postcode:</td>
+        <td>
+            <input name="postcode" type="number" class="form-control"
+            placeholder="Postcode">
+        </td>
+    </tr>
+
+    <tr>
+        <td class="reqfield">Profile Image:</td>
+        <td>
+            <input type="file" name="profile-image" value="" required>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="reqfield">Role:</td>
+        <td>
+            <select name="role" required>
+                <option value="">Choose...</option>
+                <option value="patient">Patient</option>
+                <option value="doctor">Doctor</option>
+                <option value="admin">Admin</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2" align="right">
+            <input type="submit" value="Sign up" class="btn btn-primary btn-block">
+        </td>
+    </tr>
+
+    </form>
+</table>
 
 
 <% include _footer %>
