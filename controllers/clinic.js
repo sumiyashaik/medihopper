@@ -49,6 +49,9 @@ async function bookingConf (req, res, next) {
     console.log(curUsername + " joined the queue at: " + clinic.clinicName());
 
     let curTime = await Utils.getCurTimeStr();
+    
+    // to be updated based on service time 
+    //let waitingTime = await Utils.getClinicWaitingTime(clinic.queueCount(), clinic.approxWait());
     let etaTime = await Utils.getEtaTimeStr(clinic.approxWait());
     
     res.render("booking-confirmation", 
@@ -61,6 +64,7 @@ async function bookingConf (req, res, next) {
             etaTime:    etaTime
         });
 }
+
 
 module.exports = {
     search,

@@ -49,9 +49,17 @@ async function getEtaTimeStr(waitTimeHours) {
 
     return (etaHours + ":" + etaMinutes);
 }
+async function getClinicWaitingTime(queueLength, approxWait) {
+
+    let minWait = approxWait - approxWait * 0.25;
+    let maxWait = approxWait + approxWait * 0.25;      
+
+    return (queueLength * (Math.random(Math.random() * (maxWait - minWait) + minWait))); //The maximum is exclusive and the minimum is inclusive
+}
 
 module.exports = {
     ensureAuthenticated,
+    getClinicWaitingTime,
     getCurTimeStr,
     getEtaTimeStr
 }
