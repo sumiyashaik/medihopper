@@ -1,0 +1,75 @@
+<% include _header %> 
+
+<h1>Chat feature testing</h1>
+
+<p>Authenticated!</p>
+<p>Socket ID: <span id="socketId"></span></p>
+<p>Username: <span id="username"></span></p>
+<p>Msg from server: <b><span id="serverMsg"></span></b></p>
+
+<ul id="messages">
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>    
+    </form>
+</ul>
+
+<form action="/logout" method="post">
+    <div>
+        <input type="submit" value="Log out" />
+    </div>
+</form>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    const socketIdSpan = document.getElementById("socketId");
+    const usernameSpan = document.getElementById("username");
+
+    var form = document.getElementById('form');  
+    var input = document.getElementById('input');
+
+    var serverMsgSpan = document.getElementById("serverMsg");
+
+    socket.on('connect', () => {
+        socketIdSpan.innerText = socket.id;
+
+        socket.emit('whoami', (username) => {
+            console.log('client: username is ' + username);
+            usernameSpan.innerText = username;
+
+            form.addEventListener('submit', function(e) {    
+                e.preventDefault();    
+                if (input.value) {      
+                    socket.emit('from message', 
+                                    {
+                                        socketId: socket.id,
+                                        fromUsername: username,
+                                        msg: input.value,
+                                        toUsername: "clinic1"
+                                    }
+                                );   
+                    //reset input field   
+                    input.value = '';    
+                }  
+            });
+
+            
+        });
+    });
+
+    socket.on('to message', (data) => {
+        socket.emit('whoami', (username) => {
+            console.log("username is: " + username);
+            console.log("data.toUsername is: " + data.toUsername);
+            if (username === data.toUsername) {
+                console.log("reaches here!");
+                serverMsgSpan.innerText = `from ${data.fromUsername}: ${data.msg}`;
+            }
+        });
+    });
+
+    
+
+</script>
+
+<% include _footer %> 
