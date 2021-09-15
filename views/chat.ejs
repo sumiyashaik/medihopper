@@ -2,36 +2,31 @@
 
 <h1>Chat feature testing</h1>
 
-<p>Authenticated!</p>
-<p>Socket ID: <span id="socketId"></span></p>
-<p>Username: <span id="username"></span></p>
-<p>Msg from server: <b><span id="serverMsg"></span></b></p>
+<h3>Username: <span id="username"></span></h3>
 
+<p>Send new message to:</p>
 <ul id="messages">
     <form id="form" action="">
-        <input id="input" autocomplete="off" /><button>Send</button>    
+        <input id="toUsername" name="toUsername" type="text"
+            placeholder="username" />
+        <input id="input" autocomplete="off" /><input type="submit" value="send" />    
     </form>
 </ul>
 
-<form action="/logout" method="post">
-    <div>
-        <input type="submit" value="Log out" />
-    </div>
-</form>
+<h2>Received Messages</h2><p><span id="serverMsg"></span></p>
+
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
-
-    const socketIdSpan = document.getElementById("socketId");
-    const usernameSpan = document.getElementById("username");
-
-    var form = document.getElementById('form');  
-    var input = document.getElementById('input');
-
-    var serverMsgSpan = document.getElementById("serverMsg");
+    const usernameSpan  = document.getElementById("username");
+    var form            = document.getElementById('form');  
+    var input           = document.getElementById('input');
+    var toUsername      = document.getElementById('toUsername');
+    var serverMsgSpan   = document.getElementById("serverMsg");
 
     socket.on('connect', () => {
-        socketIdSpan.innerText = socket.id;
+        //socketIdSpan.innerText = socket.id;
 
         socket.emit('whoami', (username) => {
             console.log('client: username is ' + username);
@@ -45,7 +40,7 @@
                                         socketId: socket.id,
                                         fromUsername: username,
                                         msg: input.value,
-                                        toUsername: "clinic1"
+                                        toUsername: toUsername.value
                                     }
                                 );   
                     //reset input field   
@@ -59,11 +54,8 @@
 
     socket.on('to message', (data) => {
         socket.emit('whoami', (username) => {
-            console.log("username is: " + username);
-            console.log("data.toUsername is: " + data.toUsername);
             if (username === data.toUsername) {
-                console.log("reaches here!");
-                serverMsgSpan.innerText = `from ${data.fromUsername}: ${data.msg}`;
+                serverMsgSpan.innerHTML += `<b>${data.fromUsername} says:</b> ${data.msg} <br />`;
             }
         });
     });
