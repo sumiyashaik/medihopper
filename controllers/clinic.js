@@ -57,11 +57,12 @@ async function bookingConf (req, res, next) {
     res.render("booking-confirmation", 
         { 
             clinic:     clinic,
-            latitude:   latitude,
-            longitude:  longitude,
+            pointA: geoResult[0],
+            pointB: geoResult[0],
             key:        'AIzaSyCFWLMNFY6YuUNRWphBPMkfXJodkz_oMAA',
             curTime:    curTime,
-            etaTime:    etaTime
+            etaTime:    etaTime,
+            currentUser: res.locals.currentUser
         });
 }
 
