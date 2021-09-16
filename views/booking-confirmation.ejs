@@ -4,8 +4,8 @@
     <script>
         function initMap() {           
             console.log('<%= currentUser.dispName() %>');
-             //const source = { lat: <%= pointA.latitude %>, lng: <%= pointA.longitude %> };
-            const source = { lat:  -35.314075, lng: 149.108093};
+            const source = { lat: <%= pointA.latitude %>, lng: <%= pointA.longitude %> };
+            //const source = { lat:  -35.314075, lng: 149.108093};
             const dist = { lat: <%= pointB.latitude %>, lng: <%= pointB.longitude %> };
              // The location of Uluru
             // const thisClinic = { lat: <%= pointB.latitude %>, lng: <%= pointB.longitude %> };
@@ -18,20 +18,41 @@
                 directionsService = new google.maps.DirectionsService,
                 directionsDisplay = new google.maps.DirectionsRenderer({
                     map: map
-                }),
+                }),               
                 new google.maps.Marker({
-                    position: source,
-                    title: '<%= currentUser.dispName() %>',                    
-                    map: map
-                }),
-                new google.maps.Marker({
-                    position: dist,
+                    position: dist,                    
                     title: '<%= clinic.clinicName () %>',                    
                     map: map
+                }),                
+                new google.maps.Marker({
+                    position: source,
+                    icon: "https://img.icons8.com/external-flatart-icons-flat-flatarticons/64/000000/external-location-business-and-teamwork-flatart-icons-flat-flatarticons.png",                   
+                    title: '<%= currentUser.dispName() %>',                    
+                    map: map
                 });
+                https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
 
             // get route from A to B
             calculateAndDisplayRoute(directionsService, directionsDisplay, source, dist);
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix(
+            {
+                origins: [source],
+                destinations: [dist],
+                travelMode: 'DRIVING',
+                // transitOptions: TransitOptions,
+                // drivingOptions: DrivingOptions,
+                // unitSystem: UnitSystem,
+                avoidHighways: false,
+                avoidTolls: false,
+            }, callback);
+
+            function callback(response, status) {
+
+                document.getElementById('distance').innerText = response['rows'][0].elements[0].distance.text; 
+                document.getElementById('duration').innerText = response['rows'][0].elements[0].duration.text;
+             
+            }
 
         }
         function calculateAndDisplayRoute(directionsService, directionsDisplay, pointA, pointB) {
@@ -46,9 +67,8 @@
                     window.alert('Directions request failed due to ' + status);
                 }
             });
-        }
+        } 
 
-        initMap();      
     </script>
 
     <h1>Booking Confirmation</h1>
@@ -81,7 +101,10 @@
         Please aim to arrive by <b>
             <%= etaTime %>
         </b>. </p>
-
+    <p>Total distance        
+    <span id="distance"> </span> 
+    <p>Total duration 
+    <span id="duration"> </span> 
     <p>You can manage your queue position by clicking on the button below.</p>
 
     <p>

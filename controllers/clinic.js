@@ -40,6 +40,9 @@ async function bookingConf (req, res, next) {
 
     // Gets properties of latitude and longitude based on address
     const geoResult = await geocoder.geocode(clinic.clinicAddress());
+    const geoUserResult = await geocoder.geocode(' 221 Burwood Hwy, Burwood VIC 3125');
+
+   
     const latitude = geoResult[0].latitude;
     const longitude = geoResult[0].longitude;
     console.log("latitude is: " + latitude);
@@ -57,7 +60,7 @@ async function bookingConf (req, res, next) {
     res.render("booking-confirmation", 
         { 
             clinic:     clinic,
-            pointA: geoResult[0],
+            pointA: geoUserResult[0],
             pointB: geoResult[0],
             key:        'AIzaSyCFWLMNFY6YuUNRWphBPMkfXJodkz_oMAA',
             curTime:    curTime,
